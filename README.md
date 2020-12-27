@@ -6,6 +6,8 @@ Testing another commit here.
 
 Testing link to [tracker page](tracker.js)
 
+Testing link to [test md page](test.md)
+
 You can use the [editor on GitHub](https://github.com/noahbreslow/cat-tracker/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
