@@ -8,6 +8,8 @@ Testing link to [tracker page](tracker.js)
 
 Testing link to [test md page](test.md)
 
+Testing link to [Amazon S3 text page](https://deeplens-nbreslow-test1.s3.amazonaws.com/test-s3.txt)
+
 You can use the [editor on GitHub](https://github.com/noahbreslow/cat-tracker/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
