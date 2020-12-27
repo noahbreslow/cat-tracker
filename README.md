@@ -4,7 +4,7 @@ Hi - this is Noah. I am testing VS Code to edit a GitHub respository!
 
 Testing another commit here. 
 
-Testing link to [tracker page](https://github.com/noahbreslow/cat-tracker/tracker.js)
+Testing link to [tracker page](tracker.js)
 
 You can use the [editor on GitHub](https://github.com/noahbreslow/cat-tracker/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
 
