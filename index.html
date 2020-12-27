@@ -16,10 +16,33 @@
   <body>
     <h1>Welcome to the Cat Tracker.</h1>
 
-    <p>This file tracks whether Bonnie the cat is at her home base. It uses a DeepLens camera and object recognition to tell us what we already know... she sleeps a lot!</p>
+    <p>This application tracks whether Bonnie the cat is at her home base. It uses a DeepLens camera and object recognition to tell us what we already know... she sleeps a lot!</p>
   </body>
 
   <script>
+
+    s3EventURL = 'https://deeplens-nbreslow-test1.s3.amazonaws.com/object-recognition-message.txt'
+
+    fetch(s3EventURL)
+    .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+
+      // Examine the text in the response
+      response.json().then(function(data) {
+        console.log(data);
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  });
+
+    // load the image of bonnie
   function imgLoad(url) {
     // Create new promise with the Promise() constructor;
     // This has as its argument a function
