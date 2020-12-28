@@ -14,93 +14,74 @@
   </head>
 
   <body>
-    <h1>Welcome to the Cat Tracker.</h1>
+    <h1>Welcome to the Cat Tracker!</h1>
 
     <p>This application tracks whether Bonnie the cat is at her home base. It uses a DeepLens camera and object recognition to tell us what we already know... she sleeps a lot!</p>
  
-    <img src="Bonnie.jpg" alt="Bonnie Image">
+    <button id="startPoll" onclick="startPollHandler()">Start Polling</button>
+    <button id="stopPoll" onclick="stopPollHandler()">Stop Polling</button>
+    <button id="singlePoll" onclick="singlePollHandler()">Check Cat Once</button>
 
-</body>
+    <p>Status as of <span id="datetime">[CURRENT TIME]</span>: The cat is <span id="inout">[IN/OUT]</span> with <span id="confi">[CONF%]</span> confidence.</p>
+
+    <i><p id="rawdata">Raw camera data: </p></body></i>
+
+  </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <script>
 
-    s3EventURL = 'https://deeplens-nbreslow-test1.s3.amazonaws.com/object-recognition-message.txt'
+    const s3EventURL = 'https://deeplens-nbreslow-test1.s3.amazonaws.com/object-recognition-message.txt'; 
+    var currentData;
 
-    fetch(s3EventURL, {mode: 'no-cors'})
-    .then(
-    function(response) {
-      
-        // if (response.status !== 200) {
-        if (0) {
-        console.log('Looks like there was a problem. Status Code: ' +
-          response.status);
-        return;
-      }
-    
-      console.log(response.headers.get('Content-Type'));
-      console.log(response.headers.get('Date'));
+    function singlePoll() { 
+        $.ajax({
+            url     : s3EventURL,
+            method  : 'get',
+            success : function(response)
+            {
+                currentData = JSON.parse(response);
+                console.log(currentData);
+                document.getElementById("rawdata").innerHTML = "Raw camera data: " + JSON.stringify(currentData);
+                var dt = new Date();
+                document.getElementById("datetime").innerHTML = dt.toLocaleString();
+                
+                // see if the cat is seen at all in currentData
+                if (currentData.hasOwnProperty("cat")) { 
+                    document.getElementById("inout").innerHTML = "IN";
+                    //make sure this matches the property
+                    document.getElementById("confi").innerHTML = currentData.cat;
+                } else { 
+                    document.getElementById("inout").innerHTML = "OUT";
+                    document.getElementById("confi").innerHTML = "high";
+                }
 
-      console.log(response.status);
-      console.log(response.statusText);
-      console.log(response.type);
-      console.log(response.url);
-      console.log(response.body);
-
-      // Examine the text in the response
-      response.json().then(function(data) {
-        console.log(data);
-      });
+            // You can use response like data.col1 or data.col2
+            }
+        });
     }
-  )
-  .catch(function(err) {
-    console.log('Fetch Error :-S', err);
-  });
-/*
-    // load the image of bonnie
-  function imgLoad(url) {
-    // Create new promise with the Promise() constructor;
-    // This has as its argument a function
-    // with two parameters, resolve and reject
-    return new Promise(function(resolve, reject) {
-      // Standard XHR to load an image
-      var request = new XMLHttpRequest();
-      request.open('GET', url);
-      request.responseType = 'blob';
-      // When the request loads, check whether it was successful
-      request.onload = function() {
-        if (request.status === 200) {
-        // If successful, resolve the promise by passing back the request response
-          resolve(request.response);
-        } else {
-        // If it fails, reject the promise with a error message
-          reject(Error('Image didn\'t load successfully; error code:' + request.statusText));
-        }
-      };
-      request.onerror = function() {
-      // Also deal with the case when the entire request fails to begin with
-      // This is probably a network error, so reject the promise with an appropriate message
-          reject(Error('There was a network error.'));
-      };
-      // Send the request
-      request.send();
-    });
-  }
-  // Get a reference to the body element, and create a new image object
-  var body = document.querySelector('body');
-  var myImage = new Image();
-  // Call the function with the URL we want to load, but then chain the
-  // promise then() method on to the end of it. This contains two callbacks
-  imgLoad('../Bonnie.jpg').then(function(response) {
-    // The first runs when the promise resolves, with the request.response
-    // specified within the resolve() method.
-    var imageURL = window.URL.createObjectURL(response);
-    myImage.src = imageURL;
-    body.appendChild(myImage);
-    // The second runs when the promise
-    // is rejected, and logs the Error specified with the reject() method.
-  }, function(Error) {
-    console.log(Error);
-  });
-  */
+    
+    function startPollHandler() {
+        document.getElementById("startPoll").style.color = "blue";
+        document.getElementById("stopPoll").style.color = "black";
+    }
+
+    function stopPollHandler() {
+        document.getElementById("stopPoll").style.color = "red";
+        document.getElementById("startPoll").style.color = "black";
+    }
+
+    function singlePollHandler() {
+        document.getElementById("singlePoll").style.color = "green";
+        document.getElementById("startPoll").style.color = "black";
+        document.getElementById("stopPoll").style.color = "black";
+        singlePoll();
+        setTimeout(() => {document.getElementById("singlePoll").style.color = "black";}, 200);
+    }
+
   </script>
+
+<img src="Bonnie.jpg" alt="Bonnie Image">
+
 </html>
